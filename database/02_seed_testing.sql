@@ -1,5 +1,4 @@
 SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci;
--- 6. SIMULASI UJI COBA (DUMMY DATA & TESTING)
 
 -- 1. Tambah data master pendukung (Alergi, Poliklinik, Dokter, Perawat, Kamar, Obat, Asuransi, Jenis Pembayaran, Shift)
 INSERT INTO Alergi (id_alergi, nama_alergi, kategori_alergi, keterangan_alergi) VALUES
