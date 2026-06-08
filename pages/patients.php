@@ -231,10 +231,10 @@ $patients = fetchAll(
 <div class="card mb">
     <form class="form" method="get">
         <input type="hidden" name="page" value="patients">
-        <div class="form-row">
-            <input name="q" placeholder="Cari nama atau ID pasien" value="<?= e($q) ?>">
-            <button class="btn" type="submit">Cari</button>
-        </div>
+            <div class="search-row">
+                <input name="q" placeholder="Cari nama atau ID pasien" value="<?= e($q) ?>">
+                <button class="btn search-btn" type="submit">Cari</button>
+            </div>
     </form>
 </div>
 
