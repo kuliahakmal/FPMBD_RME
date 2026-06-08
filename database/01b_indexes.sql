@@ -1,0 +1,32 @@
+-- Jalankan setelah 00_schema.sql pada instalasi database baru.
+
+CREATE INDEX idx_pasien_nama ON Pasien(nama_pasien);
+CREATE INDEX idx_riwayat_alergi_pasien ON Riwayat_Alergi(Pasien_id_pasien);
+CREATE INDEX idx_riwayat_alergi_master ON Riwayat_Alergi(Alergi_id_alergi);
+CREATE INDEX idx_riwayat_alergi_status ON Riwayat_Alergi(status_alergi);
+CREATE INDEX idx_registrasi_tanggal ON Registrasi(tanggal_registrasi);
+CREATE INDEX idx_rekam_medis_tanggal ON Rekam_Medis(tanggal_pemeriksaan);
+CREATE INDEX idx_dokter_nama ON Dokter(nama_dokter);
+CREATE INDEX idx_kamar_status ON Kamar(status_kamar);
+CREATE INDEX idx_registrasi_pasien ON Registrasi (Pasien_id_pasien);
+CREATE INDEX idx_registrasi_poliklinik ON Registrasi (Poliklinik_id_poliklinik);
+CREATE INDEX idx_rawat_inap_kamar ON Rawat_Inap (Kamar_id_kamar);
+CREATE INDEX idx_rawat_inap_registrasi ON Rawat_Inap (Registrasi_id_registrasi);
+CREATE INDEX idx_jadwal_jaga_perawat ON Jadwal_Jaga (Perawat_id_perawat);
+CREATE INDEX idx_jadwal_jaga_dokter ON Jadwal_Jaga (Dokter_id_dokter);
+CREATE INDEX idx_jadwal_jaga_shift ON Jadwal_Jaga (Shift_id_shift);
+CREATE INDEX idx_rekam_medis_registrasi ON Rekam_Medis (Registrasi_id_registrasi);
+CREATE INDEX idx_rekam_medis_dokter ON Rekam_Medis (Dokter_id_dokter);
+CREATE INDEX idx_rekam_medis_perawat ON Rekam_Medis (Perawat_id_perawat);
+CREATE INDEX idx_rekam_medis_rawat_inap ON Rekam_Medis (Rawat_Inap_id_rawat_inap);
+CREATE INDEX idx_diagnosa_rekam_medis ON Diagnosa (Rekam_Medis_id_rekam_medis);
+CREATE INDEX idx_tindakan_medis_rekam_medis ON Tindakan_Medis (Rekam_Medis_id_rekam_medis);
+CREATE INDEX idx_resep_rekam_medis ON Resep (Rekam_Medis_id_rekam_medis);
+CREATE INDEX idx_resep_detail_resep ON Resep (Detail_Resep_id_detail_resep);
+CREATE INDEX idx_detail_pembayaran_rawat_inap ON Detail_Pembayaran (Rawat_Inap_id_rawat_inap);
+CREATE INDEX idx_detail_pembayaran_resep ON Detail_Pembayaran (Resep_id_resep);
+CREATE INDEX idx_detail_pembayaran_tindakan ON Detail_Pembayaran (Tindakan_Medis_id_tindakan_medis);
+CREATE INDEX idx_pembayaran_registrasi ON Pembayaran (Registrasi_id_registrasi);
+CREATE INDEX idx_pembayaran_jenis ON Pembayaran (Jenis_Pembayaran_id_jenis_pembayaran);
+CREATE INDEX idx_pembayaran_asuransi ON Pembayaran (Asuransi_nomor_asuransi);
+CREATE INDEX idx_pembayaran_detail ON Pembayaran (Detail_Pembayaran_id_detail_pembayaran);
