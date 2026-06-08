@@ -77,5 +77,3 @@ http://localhost:8000
 File `00_schema.sql` dibuat agar web ini bisa berdiri sendiri. Kalau database kamu sudah punya DDL final dari Data Modeler, boleh pakai DDL milikmu, lalu tetap import `01_functions_procedures_triggers.sql`, `01b_indexes.sql`, dan `02_seed_testing.sql`.
 
 Relasi pasien dan alergi sudah dinormalisasi: `Alergi` menyimpan master alergen, sedangkan `Riwayat_Alergi` menyimpan relasi banyak-ke-banyak beserta reaksi, keparahan, tanggal diketahui, status, dan catatan. Untuk menaikkan database versi lama tanpa menghapus data, jalankan `database/03_migrate_normalize_patient_allergy.sql`, lalu import ulang `database/01_functions_procedures_triggers.sql`.
-# FPMBD_RME
-# FPMBD_RME
