@@ -10,12 +10,18 @@
 <body>
     <aside class="sidebar">
         <div class="brand">
-            <div class="brand-icon">HB</div>
+            <div class="brand-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+                    <path d="M12 5v14M5 12h14"/>
+                    <path d="M8.5 3.5h7a5 5 0 0 1 5 5v7a5 5 0 0 1-5 5h-7a5 5 0 0 1-5-5v-7a5 5 0 0 1 5-5Z" opacity=".45"/>
+                </svg>
+            </div>
             <div>
                 <strong><?= e(appName()) ?></strong>
                 <span>Electronic Medical Records</span>
             </div>
         </div>
+        <p class="nav-title">Menu Utama</p>
         <nav>
             <?php
             $menus = [
@@ -31,7 +37,7 @@
             ];
             foreach ($menus as $key => $label):
             ?>
-                <a class="<?= currentPage() === $key ? 'active' : '' ?>" href="<?= e(url($key)) ?>"><?= e($label) ?></a>
+                <a class="<?= currentPage() === $key ? 'active' : '' ?>" href="<?= e(url($key)) ?>" <?= currentPage() === $key ? 'aria-current="page"' : '' ?>><?= e($label) ?></a>
             <?php endforeach; ?>
         </nav>
     </aside>
