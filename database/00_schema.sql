@@ -117,6 +117,7 @@ CREATE TABLE Registrasi (
     id_registrasi CHAR(5) PRIMARY KEY,
     tanggal_registrasi DATETIME NOT NULL,
     status_registrasi VARCHAR(20) NOT NULL,
+    jenis_layanan VARCHAR(20) NOT NULL DEFAULT 'Rawat Jalan',
     Pasien_id_pasien CHAR(5) NOT NULL,
     Poliklinik_id_poliklinik CHAR(5) NOT NULL,
     CONSTRAINT fk_registrasi_pasien FOREIGN KEY (Pasien_id_pasien)
@@ -124,7 +125,9 @@ CREATE TABLE Registrasi (
         ON UPDATE CASCADE ON DELETE RESTRICT,
     CONSTRAINT fk_registrasi_poliklinik FOREIGN KEY (Poliklinik_id_poliklinik)
         REFERENCES Poliklinik(id_poliklinik)
-        ON UPDATE CASCADE ON DELETE RESTRICT
+        ON UPDATE CASCADE ON DELETE RESTRICT,
+    CONSTRAINT chk_registrasi_jenis_layanan
+        CHECK (jenis_layanan IN ('Rawat Jalan', 'Rawat Inap'))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE Shift (

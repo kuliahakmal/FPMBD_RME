@@ -1,4 +1,28 @@
 SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- File ini aman diimpor ulang setelah migration untuk memperbarui routine dan trigger.
+DROP TRIGGER IF EXISTS trg_generate_id_rekam_medis;
+DROP TRIGGER IF EXISTS trg_kurang_stok_obat;
+DROP TRIGGER IF EXISTS trg_kamar_terisi;
+DROP TRIGGER IF EXISTS trg_kamar_kosong;
+DROP TRIGGER IF EXISTS trg_validasi_stok_obat;
+DROP TRIGGER IF EXISTS trg_set_total_pembayaran;
+DROP TRIGGER IF EXISTS trg_update_pembayaran_upd;
+DROP TRIGGER IF EXISTS trg_audit_rekam_medis;
+
+DROP PROCEDURE IF EXISTS registrasi_pasien_baru;
+DROP PROCEDURE IF EXISTS perbarui_pasien_dan_alergi;
+DROP PROCEDURE IF EXISTS buat_rekam_medis;
+DROP PROCEDURE IF EXISTS proses_pembayaran;
+DROP PROCEDURE IF EXISTS tambah_jadwal_jaga;
+DROP PROCEDURE IF EXISTS proses_rawat_inap;
+
+DROP FUNCTION IF EXISTS hitung_umur_pasien;
+DROP FUNCTION IF EXISTS hitung_total_biaya;
+DROP FUNCTION IF EXISTS cek_ketersediaan_kamar;
+DROP FUNCTION IF EXISTS hitung_total_obat;
+DROP FUNCTION IF EXISTS riwayat_alergi_pasien;
+
 -- 1. TABEL LOG AUDIT
 
 CREATE TABLE IF NOT EXISTS Log_Audit_Rekam_Medis (
@@ -124,7 +148,8 @@ CREATE PROCEDURE registrasi_pasien_baru(
     IN p_gender CHAR(1),
     IN p_riwayat_alergi_json LONGTEXT,
     IN p_id_registrasi CHAR(5),
-    IN p_id_poliklinik CHAR(5)
+    IN p_id_poliklinik CHAR(5),
+    IN p_jenis_layanan VARCHAR(20)
 )
 BEGIN
     DECLARE v_index INT DEFAULT 0;
@@ -152,6 +177,12 @@ BEGIN
     IF p_tgl_lahir > CURDATE() THEN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'Tanggal lahir pasien tidak boleh di masa depan';
+    END IF;
+
+    SET p_jenis_layanan = COALESCE(NULLIF(p_jenis_layanan, ''), 'Rawat Jalan');
+    IF p_jenis_layanan NOT IN ('Rawat Jalan', 'Rawat Inap') THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Jenis layanan harus Rawat Jalan atau Rawat Inap';
     END IF;
     
     INSERT INTO Pasien (
@@ -192,10 +223,10 @@ BEGIN
     END WHILE;
     
     INSERT INTO Registrasi (
-        id_registrasi, tanggal_registrasi, status_registrasi, 
+        id_registrasi, tanggal_registrasi, status_registrasi, jenis_layanan,
         Pasien_id_pasien, Poliklinik_id_poliklinik
     ) VALUES (
-        p_id_registrasi, NOW(), 'Terdaftar', 
+        p_id_registrasi, NOW(), 'Terdaftar', p_jenis_layanan,
         p_id_pasien, p_id_poliklinik
     );
     
@@ -468,10 +499,10 @@ BEGIN
         INSERT INTO Rawat_Inap (id_rawat_inap, tanggal_masuk, tanggal_keluar, Kamar_id_kamar, Registrasi_id_registrasi)
         VALUES (p_id_rawat_inap, p_tanggal_masuk, NULL, p_id_kamar, p_id_registrasi);
 
-        -- 3. Mengubah status kamar menjadi terisi
-        UPDATE Kamar
-        SET status_kamar = 'Terisi'
-        WHERE id_kamar = p_id_kamar;
+        -- 3. Menandai jenis layanan registrasi. Status kamar diubah oleh trigger.
+        UPDATE Registrasi
+        SET jenis_layanan = 'Rawat Inap'
+        WHERE id_registrasi = p_id_registrasi;
     END IF;
 
     COMMIT;
@@ -527,6 +558,11 @@ BEGIN
     UPDATE Kamar
     SET status_kamar = 'Terisi'
     WHERE id_kamar = NEW.Kamar_id_kamar;
+
+    -- Menjaga konsistensi jika Rawat_Inap dibuat langsung tanpa procedure.
+    UPDATE Registrasi
+    SET jenis_layanan = 'Rawat Inap'
+    WHERE id_registrasi = NEW.Registrasi_id_registrasi;
 END$$
 
 -- 4.4 Trigger Mengubah Status Kamar Menjadi Kosong

@@ -46,7 +46,7 @@ if ($action === 'store') {
     postOnly();
 
     try {
-        execute('CALL registrasi_pasien_baru(?, ?, ?, ?, ?, ?, ?, ?, ?)', [
+        execute('CALL registrasi_pasien_baru(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [
             $_POST['id_pasien'],
             $_POST['nama_pasien'],
             $_POST['nomor_telepon_pasien'],
@@ -56,6 +56,7 @@ if ($action === 'store') {
             allergyHistoryJson($_POST['alergi'] ?? []),
             $_POST['id_registrasi'],
             $_POST['id_poliklinik'],
+            $_POST['jenis_layanan'] ?? 'Rawat Jalan',
         ]);
 
         flash('Pasien, registrasi, dan riwayat alergi berhasil dibuat.');
@@ -120,7 +121,7 @@ if ($action === 'create' || $action === 'edit') {
     <section class="header">
         <div>
             <h1><?= $action === 'create' ? 'Tambah Pasien' : 'Edit Pasien' ?></h1>
-            <p>Pasien dapat tidak memiliki alergi atau memiliki beberapa riwayat alergi sekaligus.</p>
+            <p>Pasien baru langsung dibuatkan registrasi dengan jenis layanan per kunjungan.</p>
         </div>
         <a class="btn secondary" href="<?= e(url('patients')) ?>">Kembali</a>
     </section>
@@ -144,6 +145,13 @@ if ($action === 'create' || $action === 'edit') {
                                     <?= e($row['nama_poliklinik']) ?>
                                 </option>
                             <?php endforeach; ?>
+                        </select>
+                    </label>
+
+                    <label>Jenis Layanan
+                        <select name="jenis_layanan" required>
+                            <option value="Rawat Jalan" selected>Rawat Jalan</option>
+                            <option value="Rawat Inap">Rawat Inap</option>
                         </select>
                     </label>
                 <?php endif; ?>

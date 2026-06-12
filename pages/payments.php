@@ -34,7 +34,7 @@ if ($action === 'store') {
 
 if ($action === 'create') {
     $registrasi = fetchAll(
-        'SELECT r.id_registrasi, p.nama_pasien FROM Registrasi r JOIN Pasien p ON p.id_pasien = r.Pasien_id_pasien ORDER BY r.tanggal_registrasi DESC'
+        'SELECT r.id_registrasi, r.jenis_layanan, p.nama_pasien FROM Registrasi r JOIN Pasien p ON p.id_pasien = r.Pasien_id_pasien ORDER BY r.tanggal_registrasi DESC'
     );
     $jenis = fetchAll('SELECT * FROM Jenis_Pembayaran ORDER BY nama_jenis_pembayaran');
     $asuransi = fetchAll('SELECT * FROM Asuransi ORDER BY nama_lembaga_asuransi');
@@ -63,7 +63,7 @@ if ($action === 'create') {
             <div class="form-row">
                 <label>Registrasi
                     <select name="id_registrasi" required>
-                        <?php foreach ($registrasi as $row): ?><option value="<?= e($row['id_registrasi']) ?>"><?= e($row['id_registrasi'] . ' - ' . $row['nama_pasien']) ?></option><?php endforeach; ?>
+                        <?php foreach ($registrasi as $row): ?><option value="<?= e($row['id_registrasi']) ?>"><?= e($row['id_registrasi'] . ' - ' . $row['nama_pasien'] . ' - ' . $row['jenis_layanan']) ?></option><?php endforeach; ?>
                     </select>
                 </label>
                 <label>Jenis Pembayaran
@@ -97,7 +97,7 @@ if ($action === 'create') {
 }
 
 $rows = fetchAll(
-    'SELECT py.*, p.nama_pasien, jp.nama_jenis_pembayaran, a.nama_lembaga_asuransi, dp.keterangan_biaya
+    'SELECT py.*, r.jenis_layanan, p.nama_pasien, jp.nama_jenis_pembayaran, a.nama_lembaga_asuransi, dp.keterangan_biaya
      FROM Pembayaran py
      JOIN Registrasi r ON r.id_registrasi = py.Registrasi_id_registrasi
      JOIN Pasien p ON p.id_pasien = r.Pasien_id_pasien
@@ -118,20 +118,21 @@ $rows = fetchAll(
 <div class="card">
     <div class="table-wrap">
         <table>
-            <thead><tr><th>ID</th><th>Tanggal</th><th>Pasien</th><th>Keterangan</th><th>Metode</th><th>Asuransi</th><th>Total</th></tr></thead>
+            <thead><tr><th>ID</th><th>Tanggal</th><th>Pasien</th><th>Layanan</th><th>Keterangan</th><th>Metode</th><th>Asuransi</th><th>Total</th></tr></thead>
             <tbody>
             <?php foreach ($rows as $row): ?>
                 <tr>
                     <td><?= e($row['id_pembayaran']) ?></td>
                     <td><?= e($row['tanggal_pembayaran']) ?></td>
                     <td><?= e($row['nama_pasien']) ?></td>
+                    <td><?= e($row['jenis_layanan']) ?></td>
                     <td><?= e($row['keterangan_biaya']) ?></td>
                     <td><?= e($row['nama_jenis_pembayaran']) ?></td>
                     <td><?= e($row['nama_lembaga_asuransi'] ?? '-') ?></td>
                     <td><strong><?= e(rupiah($row['total_biaya'])) ?></strong></td>
                 </tr>
             <?php endforeach; ?>
-            <?php if (!$rows): ?><tr><td colspan="7" class="muted">Belum ada data.</td></tr><?php endif; ?>
+            <?php if (!$rows): ?><tr><td colspan="8" class="muted">Belum ada data.</td></tr><?php endif; ?>
             </tbody>
         </table>
     </div>

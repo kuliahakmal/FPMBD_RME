@@ -27,9 +27,11 @@ if ($action === 'checkout') {
 
 if ($action === 'create') {
     $registrasi = fetchAll(
-        'SELECT r.id_registrasi, p.nama_pasien
+        'SELECT r.id_registrasi, r.jenis_layanan, p.nama_pasien
          FROM Registrasi r
          JOIN Pasien p ON p.id_pasien = r.Pasien_id_pasien
+         LEFT JOIN Rawat_Inap ri ON ri.Registrasi_id_registrasi = r.id_registrasi
+         WHERE ri.id_rawat_inap IS NULL
          ORDER BY r.tanggal_registrasi DESC'
     );
     $kamar = fetchAll("SELECT * FROM Kamar WHERE status_kamar = 'Kosong' ORDER BY nomor_kamar");
@@ -39,7 +41,7 @@ if ($action === 'create') {
     <section class="header">
         <div>
             <h1>Proses Rawat Inap</h1>
-            <p>Form ini memakai stored procedure proses_rawat_inap.</p>
+            <p>Rawat inap dapat dibuat setelah registrasi; procedure akan menetapkan jenis layanan menjadi Rawat Inap.</p>
         </div>
         <a class="btn secondary" href="<?= e(url('inpatient')) ?>">Kembali</a>
     </section>
@@ -57,7 +59,7 @@ if ($action === 'create') {
             <div class="form-row">
                 <label>Registrasi
                     <select name="id_registrasi" required>
-                        <?php foreach ($registrasi as $row): ?><option value="<?= e($row['id_registrasi']) ?>"><?= e($row['id_registrasi'] . ' - ' . $row['nama_pasien']) ?></option><?php endforeach; ?>
+                        <?php foreach ($registrasi as $row): ?><option value="<?= e($row['id_registrasi']) ?>"><?= e($row['id_registrasi'] . ' - ' . $row['nama_pasien'] . ' - ' . $row['jenis_layanan']) ?></option><?php endforeach; ?>
                     </select>
                 </label>
                 <label>Kamar Kosong

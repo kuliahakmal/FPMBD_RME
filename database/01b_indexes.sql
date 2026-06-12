@@ -5,6 +5,7 @@ CREATE INDEX idx_riwayat_alergi_pasien ON Riwayat_Alergi(Pasien_id_pasien);
 CREATE INDEX idx_riwayat_alergi_master ON Riwayat_Alergi(Alergi_id_alergi);
 CREATE INDEX idx_riwayat_alergi_status ON Riwayat_Alergi(status_alergi);
 CREATE INDEX idx_registrasi_tanggal ON Registrasi(tanggal_registrasi);
+CREATE INDEX idx_registrasi_jenis_layanan ON Registrasi(jenis_layanan);
 CREATE INDEX idx_rekam_medis_tanggal ON Rekam_Medis(tanggal_pemeriksaan);
 CREATE INDEX idx_dokter_nama ON Dokter(nama_dokter);
 CREATE INDEX idx_kamar_status ON Kamar(status_kamar);

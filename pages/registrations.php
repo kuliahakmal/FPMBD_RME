@@ -18,7 +18,7 @@ $rows = fetchAll(
 <div class="card">
     <div class="table-wrap">
         <table>
-            <thead><tr><th>ID</th><th>Tanggal</th><th>Pasien</th><th>Poliklinik</th><th>Status</th></tr></thead>
+            <thead><tr><th>ID</th><th>Tanggal</th><th>Pasien</th><th>Poliklinik</th><th>Jenis Layanan</th><th>Status</th></tr></thead>
             <tbody>
             <?php foreach ($rows as $row): ?>
                 <tr>
@@ -26,10 +26,11 @@ $rows = fetchAll(
                     <td><?= e($row['tanggal_registrasi']) ?></td>
                     <td><?= e($row['nama_pasien']) ?></td>
                     <td><?= e($row['nama_poliklinik']) ?></td>
+                    <td><span class="badge <?= $row['jenis_layanan'] === 'Rawat Inap' ? 'warning' : 'success' ?>"><?= e($row['jenis_layanan']) ?></span></td>
                     <td><span class="badge"><?= e($row['status_registrasi']) ?></span></td>
                 </tr>
             <?php endforeach; ?>
-            <?php if (!$rows): ?><tr><td colspan="5" class="muted">Belum ada data.</td></tr><?php endif; ?>
+            <?php if (!$rows): ?><tr><td colspan="6" class="muted">Belum ada data.</td></tr><?php endif; ?>
             </tbody>
         </table>
     </div>

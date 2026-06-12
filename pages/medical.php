@@ -52,7 +52,7 @@ if ($action === 'update_keluhan') {
 
 if ($action === 'create') {
     $registrasi = fetchAll(
-        'SELECT r.id_registrasi, p.nama_pasien, pl.nama_poliklinik
+        'SELECT r.id_registrasi, r.jenis_layanan, p.nama_pasien, pl.nama_poliklinik
          FROM Registrasi r
          JOIN Pasien p ON p.id_pasien = r.Pasien_id_pasien
          JOIN Poliklinik pl ON pl.id_poliklinik = r.Poliklinik_id_poliklinik
@@ -99,7 +99,7 @@ if ($action === 'create') {
                 </label>
                 <label>Registrasi
                     <select name="id_registrasi" required>
-                        <?php foreach ($registrasi as $row): ?><option value="<?= e($row['id_registrasi']) ?>"><?= e($row['id_registrasi'] . ' - ' . $row['nama_pasien'] . ' - ' . $row['nama_poliklinik']) ?></option><?php endforeach; ?>
+                        <?php foreach ($registrasi as $row): ?><option value="<?= e($row['id_registrasi']) ?>"><?= e($row['id_registrasi'] . ' - ' . $row['nama_pasien'] . ' - ' . $row['jenis_layanan'] . ' - ' . $row['nama_poliklinik']) ?></option><?php endforeach; ?>
                     </select>
                 </label>
                 <label>Rawat Inap Opsional
@@ -168,7 +168,7 @@ if ($action === 'create') {
 }
 
 $medical = fetchAll(
-    'SELECT rm.*, p.nama_pasien, d.nama_dokter, pr.nama_perawat, dg.nama_diagnosa, tm.nama_tindakan, tm.biaya_tindakan
+    'SELECT rm.*, r.jenis_layanan, p.nama_pasien, d.nama_dokter, pr.nama_perawat, dg.nama_diagnosa, tm.nama_tindakan, tm.biaya_tindakan
      FROM Rekam_Medis rm
      JOIN Registrasi r ON r.id_registrasi = rm.Registrasi_id_registrasi
      JOIN Pasien p ON p.id_pasien = r.Pasien_id_pasien
@@ -190,13 +190,14 @@ $medical = fetchAll(
 <div class="card">
     <div class="table-wrap">
         <table>
-            <thead><tr><th>ID</th><th>Tanggal</th><th>Pasien</th><th>Dokter</th><th>Diagnosa</th><th>Tindakan</th><th>Keluhan</th><th>Aksi</th></tr></thead>
+            <thead><tr><th>ID</th><th>Tanggal</th><th>Pasien</th><th>Layanan</th><th>Dokter</th><th>Diagnosa</th><th>Tindakan</th><th>Keluhan</th><th>Aksi</th></tr></thead>
             <tbody>
             <?php foreach ($medical as $row): ?>
                 <tr>
                     <td><?= e($row['id_rekam_medis']) ?></td>
                     <td><?= e($row['tanggal_pemeriksaan']) ?></td>
                     <td><?= e($row['nama_pasien']) ?></td>
+                    <td><?= e($row['jenis_layanan']) ?></td>
                     <td><?= e($row['nama_dokter']) ?></td>
                     <td><?= e($row['nama_diagnosa'] ?? '-') ?></td>
                     <td><?= e($row['nama_tindakan'] ?? '-') ?><br><span class="muted small"><?= isset($row['biaya_tindakan']) ? e(rupiah($row['biaya_tindakan'])) : '' ?></span></td>
@@ -210,7 +211,7 @@ $medical = fetchAll(
                     </td>
                 </tr>
             <?php endforeach; ?>
-            <?php if (!$medical): ?><tr><td colspan="8" class="muted">Belum ada data.</td></tr><?php endif; ?>
+            <?php if (!$medical): ?><tr><td colspan="9" class="muted">Belum ada data.</td></tr><?php endif; ?>
             </tbody>
         </table>
     </div>

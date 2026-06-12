@@ -34,7 +34,14 @@ INSERT INTO Shift (id_shift, Jenis_Shift, Jam_Masuk, Jam_Selesai) VALUES
 CALL registrasi_pasien_baru(
     'PS001', 'Andi Pratama', '081122334455', 'Jl. Merdeka No. 45', '1995-08-17', 'L',
     '[{"id_alergi":"A0001","reaksi":"Gatal-gatal pada kulit","keparahan":"Sedang","tanggal_diketahui":"2024-02-10","status":"Aktif","catatan":"Dikonfirmasi setelah konsumsi obat"}]',
-    'R0001', 'P0001'
+    'R0001', 'P0001', 'Rawat Inap'
+);
+
+-- Contoh registrasi Rawat Jalan tanpa data Rawat_Inap.
+CALL registrasi_pasien_baru(
+    'PS002', 'Sari Lestari', '081133445566', 'Jl. Melati No. 12', '1998-04-21', 'P',
+    '[]',
+    'R0002', 'P0001', 'Rawat Jalan'
 );
 
 -- Cek apakah pasien & registrasi masuk
@@ -79,14 +86,23 @@ SELECT * FROM Tindakan_Medis;
 SELECT * FROM Detail_Resep;
 SELECT * FROM Resep;
 
+-- Rawat Jalan tetap dapat memiliki rekam medis, diagnosa, tindakan, dan resep.
+CALL buat_rekam_medis(
+    'RM000', 'Batuk ringan selama tiga hari', 'R0002', 'D0001', 'N0001', NULL,
+    'DG002', 'Infeksi Saluran Pernapasan Atas', 'Gejala ringan tanpa rawat inap',
+    'T0002', 'Pemeriksaan Umum', 75000.00, 'Kondisi stabil',
+    TRUE, 'RS002', 'DR002', 3, '2x1 tablet'
+);
+
 
 -- 7. Uji Coba Trigger Mengurangi Stok Obat & Validasi Stok Obat
 SELECT stok_obat FROM Obat WHERE id_obat = 'O0001'; -- Stok awal 100
 
 -- Kaitkan obat dengan resep (Trigger validation & reduction berjalan)
 INSERT INTO Obat_Resep (Obat_id_obat, Resep_id_resep) VALUES ('O0001', 'RS001');
+INSERT INTO Obat_Resep (Obat_id_obat, Resep_id_resep) VALUES ('O0001', 'RS002');
 
-SELECT stok_obat FROM Obat WHERE id_obat = 'O0001'; -- Seharusnya berkurang 2 menjadi 98
+SELECT stok_obat FROM Obat WHERE id_obat = 'O0001'; -- Seharusnya berkurang 5 menjadi 95
 
 
 -- 8. Uji Coba Function hitung_total_obat
@@ -96,10 +112,12 @@ SELECT hitung_total_obat('RS001') AS Total_Obat_Resep;
 -- 9. Uji Coba Stored Procedure Pembayaran & Trigger Sinkronisasi Total
 -- Buat detail pembayaran terlebih dahulu
 INSERT INTO Detail_Pembayaran (id_detail_pembayaran, keterangan_biaya, sub_total, Tindakan_Medis_id_tindakan_medis, Rawat_Inap_id_rawat_inap, Resep_id_resep) VALUES
-('DP001', 'Biaya Tindakan & Obat', 250000.00, 'T0001', 'RI001', 'RS001');
+('DP001', 'Biaya Tindakan, Rawat Inap & Obat', 250000.00, 'T0001', 'RI001', 'RS001'),
+('DP002', 'Biaya Rawat Jalan & Obat', 100000.00, 'T0002', NULL, 'RS002');
 
 -- Proses Pembayaran
 CALL proses_pembayaran('PY001', 'R0001', 'JP001', 'ASR0000000001', 'DP001');
+CALL proses_pembayaran('PY002', 'R0002', 'JP001', NULL, 'DP002');
 
 -- Cek pembayaran (total_biaya seharusnya otomatis sinkron dengan sub_total DP001)
 SELECT * FROM Pembayaran;

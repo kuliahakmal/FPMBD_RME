@@ -2,6 +2,8 @@
 $stats = [
     'Pasien' => (int)(fetchOne('SELECT COUNT(*) AS total FROM Pasien')['total'] ?? 0),
     'Registrasi' => (int)(fetchOne('SELECT COUNT(*) AS total FROM Registrasi')['total'] ?? 0),
+    'Rawat Jalan' => (int)(fetchOne("SELECT COUNT(*) AS total FROM Registrasi WHERE jenis_layanan = 'Rawat Jalan'")['total'] ?? 0),
+    'Rawat Inap' => (int)(fetchOne("SELECT COUNT(*) AS total FROM Registrasi WHERE jenis_layanan = 'Rawat Inap'")['total'] ?? 0),
     'Rekam Medis' => (int)(fetchOne('SELECT COUNT(*) AS total FROM Rekam_Medis')['total'] ?? 0),
     'Kamar Kosong' => (int)(fetchOne("SELECT COUNT(*) AS total FROM Kamar WHERE status_kamar = 'Kosong'")['total'] ?? 0),
 ];
