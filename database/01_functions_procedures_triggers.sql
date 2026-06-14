@@ -1,6 +1,5 @@
-SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci;
+SET NAMES utf8mb4 COLLATE utf8mb4_0900_ai_ci;
 
--- File ini aman diimpor ulang setelah migration untuk memperbarui routine dan trigger.
 DROP TRIGGER IF EXISTS trg_generate_id_rekam_medis;
 DROP TRIGGER IF EXISTS trg_kurang_stok_obat;
 DROP TRIGGER IF EXISTS trg_kamar_terisi;
@@ -37,7 +36,7 @@ CREATE TABLE IF NOT EXISTS Log_Audit_Rekam_Medis (
     dokter_baru CHAR(5),
     perawat_lama CHAR(5),
     perawat_baru CHAR(5)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- 2. FUNCTIONS
 

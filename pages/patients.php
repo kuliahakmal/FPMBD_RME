@@ -554,7 +554,8 @@ $patients = fetchAll(
                         <td><?= e($row['jenis_kelamin_pasien']) ?></td>
                         <td><?= e($row['alergi']) ?></td>
                         <td><?= e($row['nomor_telepon_pasien']) ?></td>
-                        <td>
+                        <td style="display: flex; gap: 4px;">
+                            <a class="btn secondary" href="<?= e(url('registrations', ['action' => 'create', 'patient_id' => $row['id_pasien']])) ?>">Kunjungan</a>
                             <a class="btn secondary" href="<?= e(url('patients', ['action' => 'edit', 'id' => $row['id_pasien']])) ?>">Edit</a>
                         </td>
                     </tr>

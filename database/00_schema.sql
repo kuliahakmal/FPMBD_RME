@@ -1,4 +1,4 @@
-SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci;
+SET NAMES utf8mb4 COLLATE utf8mb4_0900_ai_ci;
 SET FOREIGN_KEY_CHECKS = 0;
 
 DROP TRIGGER IF EXISTS trg_generate_id_rekam_medis;
@@ -57,7 +57,7 @@ CREATE TABLE Alergi (
     CONSTRAINT uq_alergi_nama UNIQUE (nama_alergi),
     CONSTRAINT chk_kategori_alergi
         CHECK (kategori_alergi IN ('Obat', 'Makanan', 'Lingkungan', 'Lainnya'))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE Pasien (
     id_pasien CHAR(5) PRIMARY KEY,
@@ -69,7 +69,7 @@ CREATE TABLE Pasien (
 
     CONSTRAINT chk_jenis_kelamin_pasien
         CHECK (jenis_kelamin_pasien IN ('L', 'P'))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE Riwayat_Alergi (
     id_riwayat_alergi BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -91,26 +91,26 @@ CREATE TABLE Riwayat_Alergi (
         CHECK (tingkat_keparahan IN ('Ringan', 'Sedang', 'Berat')),
     CONSTRAINT chk_status_alergi
         CHECK (status_alergi IN ('Aktif', 'Tidak Aktif'))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE Poliklinik (
     id_poliklinik CHAR(5) PRIMARY KEY,
     nama_poliklinik VARCHAR(50) NOT NULL,
     lokasi_poliklinik VARCHAR(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE Dokter (
     id_dokter CHAR(5) PRIMARY KEY,
     nama_dokter VARCHAR(50) NOT NULL,
     nomor_telepon_dokter VARCHAR(16) NOT NULL,
     spesialisasi_dokter VARCHAR(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE Perawat (
     id_perawat CHAR(5) PRIMARY KEY,
     nama_perawat VARCHAR(50) NOT NULL,
     nomor_telepon_perawat VARCHAR(16) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
 CREATE TABLE Registrasi (
@@ -128,14 +128,14 @@ CREATE TABLE Registrasi (
         ON UPDATE CASCADE ON DELETE RESTRICT,
     CONSTRAINT chk_registrasi_jenis_layanan
         CHECK (jenis_layanan IN ('Rawat Jalan', 'Rawat Inap'))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE Shift (
     id_shift INT PRIMARY KEY,
     Jenis_Shift VARCHAR(20) NOT NULL,
     Jam_Masuk TIME NOT NULL,
     Jam_Selesai TIME NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE Jadwal_Jaga (
     id_jadwal CHAR(5) PRIMARY KEY,
@@ -152,14 +152,14 @@ CREATE TABLE Jadwal_Jaga (
     CONSTRAINT fk_jadwal_shift FOREIGN KEY (Shift_id_shift)
         REFERENCES Shift(id_shift)
         ON UPDATE CASCADE ON DELETE RESTRICT
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE Kamar (
     id_kamar CHAR(5) PRIMARY KEY,
     nomor_kamar INT NOT NULL,
     tipe_kamar VARCHAR(30) NOT NULL,
     status_kamar VARCHAR(10) NOT NULL DEFAULT 'Kosong'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE Rawat_Inap (
     id_rawat_inap CHAR(5) PRIMARY KEY,
@@ -173,7 +173,7 @@ CREATE TABLE Rawat_Inap (
     CONSTRAINT fk_rawat_registrasi FOREIGN KEY (Registrasi_id_registrasi)
         REFERENCES Registrasi(id_registrasi)
         ON UPDATE CASCADE ON DELETE RESTRICT
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE Rekam_Medis (
     id_rekam_medis CHAR(5) PRIMARY KEY,
@@ -196,7 +196,7 @@ CREATE TABLE Rekam_Medis (
         REFERENCES Rawat_Inap(id_rawat_inap)
         ON UPDATE CASCADE ON DELETE SET NULL,
     CONSTRAINT uq_rm_registrasi UNIQUE (Registrasi_id_registrasi)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE Diagnosa (
     id_diagnosa CHAR(5) PRIMARY KEY,
@@ -206,7 +206,7 @@ CREATE TABLE Diagnosa (
     CONSTRAINT fk_diagnosa_rm FOREIGN KEY (Rekam_Medis_id_rekam_medis)
         REFERENCES Rekam_Medis(id_rekam_medis)
         ON UPDATE CASCADE ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE Tindakan_Medis (
     id_tindakan_medis CHAR(5) PRIMARY KEY,
@@ -217,13 +217,13 @@ CREATE TABLE Tindakan_Medis (
     CONSTRAINT fk_tindakan_rm FOREIGN KEY (Rekam_Medis_id_rekam_medis)
         REFERENCES Rekam_Medis(id_rekam_medis)
         ON UPDATE CASCADE ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE Detail_Resep (
     id_detail_resep CHAR(5) PRIMARY KEY,
     jumlah_obat INT NOT NULL,
     dosis_obat VARCHAR(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE Resep (
     id_resep CHAR(5) PRIMARY KEY,
@@ -236,14 +236,14 @@ CREATE TABLE Resep (
     CONSTRAINT fk_resep_detail FOREIGN KEY (Detail_Resep_id_detail_resep)
         REFERENCES Detail_Resep(id_detail_resep)
         ON UPDATE CASCADE ON DELETE RESTRICT
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE Obat (
     id_obat CHAR(5) PRIMARY KEY,
     nama_obat VARCHAR(100) NOT NULL,
     stok_obat INT NOT NULL,
     harga_obat DECIMAL(10,2) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE Obat_Resep (
     Obat_id_obat CHAR(5) NOT NULL,
@@ -255,18 +255,18 @@ CREATE TABLE Obat_Resep (
     CONSTRAINT fk_or_resep FOREIGN KEY (Resep_id_resep)
         REFERENCES Resep(id_resep)
         ON UPDATE CASCADE ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE Jenis_Pembayaran (
     id_jenis_pembayaran CHAR(5) PRIMARY KEY,
     nama_jenis_pembayaran VARCHAR(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE Asuransi (
     nomor_asuransi CHAR(13) PRIMARY KEY,
     nama_lembaga_asuransi VARCHAR(50) NOT NULL,
     jenis_asuransi VARCHAR(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE Detail_Pembayaran (
     id_detail_pembayaran CHAR(5) PRIMARY KEY,
@@ -284,7 +284,7 @@ CREATE TABLE Detail_Pembayaran (
     CONSTRAINT fk_dp_resep FOREIGN KEY (Resep_id_resep)
         REFERENCES Resep(id_resep)
         ON UPDATE CASCADE ON DELETE SET NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE Pembayaran (
     id_pembayaran CHAR(5) PRIMARY KEY,
@@ -307,4 +307,4 @@ CREATE TABLE Pembayaran (
         REFERENCES Detail_Pembayaran(id_detail_pembayaran)
         ON UPDATE CASCADE ON DELETE RESTRICT,
     CONSTRAINT uq_pembayaran_registrasi UNIQUE (Registrasi_id_registrasi)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
